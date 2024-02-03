@@ -1,0 +1,12 @@
+{
+  "name": "playgroundjs",
+  "version": "1.0.0",
+  "description": "all js ecosystem toys",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "AJ",
+  "license": "MPL2"
+}
