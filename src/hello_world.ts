@@ -677,3 +677,102 @@ type BooleanArray = boolean[];
 type SomeArray = boolean[];
 
 type Content = SomeArray[number]; // boolean
+
+namespace first {
+  type First<Tuple extends any[]> = Tuple[0]
+
+  type res1 = First<[]>;
+  type test1 = Expect<Equal<res1, undefined>>;
+
+  type res2 = First<[string]>;
+  type test2 = Expect<Equal<res2, string>>;
+
+  type res3 = First<[2, 3, 4]>;
+  type test3 = Expect<Equal<res3, 2>>;
+
+  type res4 = First<["a", "b", "c"]>;
+  type test4 = Expect<Equal<res4, "a">>;
+}
+
+namespace append {
+  type Append<Tuple extends any[], Element> = [...Tuple, Element]
+
+  type res1 = Append<[1, 2, 3], 4>;
+  type test1 = Expect<Equal<res1, [1, 2, 3, 4]>>;
+
+  type res2 = Append<[], 1>;
+  type test2 = Expect<Equal<res2, [1]>>;
+}
+
+namespace concat {
+  type Concat<Tuple1 extends any[], Tuple2 extends any[]> =
+    [...Tuple1, ...Tuple2]
+
+  type res1 = Concat<[1, 2, 3], [4, 5]>;
+  type test1 = Expect<Equal<res1, [1, 2, 3, 4, 5]>>;
+
+  type res2 = Concat<[1, 2, 3], []>;
+  type test2 = Expect<Equal<res2, [1, 2, 3]>>;
+}
+
+namespace tupleToArray {
+  type TupleToArray<Tuple extends any[]> = Tuple[number][]
+
+  type res1 = TupleToArray<[1, 2, 3]>;
+  type test1 = Expect<Equal<res1, (1 | 2 | 3)[]>>;
+
+  type res2 = TupleToArray<[number, string]>;
+  type test2 = Expect<Equal<res2, (number | string)[]>>;
+
+  type res3 = TupleToArray<[]>;
+  type test3 = Expect<Equal<res3, never[]>>;
+
+  type res4 = TupleToArray<[1] | [2] | [3]>;
+  type test4 = Expect<Equal<res4, (1 | 2 | 3)[]>>;
+}
+
+namespace nonEmptyArray {
+  type NonEmptyArray<T> = [T, ...T[]]
+
+  function sendMail(addresses: NonEmptyArray<string>) {
+    /* ... */
+  }
+
+  sendMail(["123 5th Ave"]); // ✅
+  sendMail(["75 rue Quincampoix", "75003 Paris"]); // ✅
+  // @ts-expect-error
+  sendMail([]);
+  //       ^ ❌ `[]` isn't assignable to `NonEmptyArray<string>`
+}
+
+namespace length {
+  type Length<Tuple extends any[]> = Tuple["length"]
+
+  type res1 = Length<[]>;
+  type test1 = Expect<Equal<res1, 0>>;
+
+  type res2 = Length<[any]>;
+  type test2 = Expect<Equal<res2, 1>>;
+
+  type res3 = Length<[any, any]>;
+  type test3 = Expect<Equal<res3, 2>>;
+
+  type res4 = Length<[any, any, any]>;
+  type test4 = Expect<Equal<res4, 3>>;
+}
+
+namespace lengthPlusOne {
+  type LengthPlusOne<Tuple extends any[]> = [...Tuple, any]["length"]
+
+  type res1 = LengthPlusOne<[]>;
+  type test1 = Expect<Equal<res1, 1>>;
+
+  type res2 = LengthPlusOne<[any]>;
+  type test2 = Expect<Equal<res2, 2>>;
+
+  type res3 = LengthPlusOne<[any, any]>;
+  type test3 = Expect<Equal<res3, 3>>;
+
+  type res4 = LengthPlusOne<[any, any, any]>;
+  type test4 = Expect<Equal<res4, 4>>;
+}
